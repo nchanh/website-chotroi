@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/admin.html}">
+
+<head>
+</head>
+
+<body>
+
+    <div class="container-fluid row mt-3 justify-content-center profile-content" layout:fragment="content">
+        <div class="col-12 text-center">
+            <h4 class="text-uppercase">TĂ i Khoáº£n Cá»§a TĂ´i</h4>
+            <h6>Quáº£n lĂ½ thĂ´ng tin tĂ i khoáº£n cá»§a báº¡n. Báº¡n khĂ´ng nĂªn tiáº¿t lá»™ thĂ´ng tin Ä‘á»ƒ Ä‘áº£m báº£o an toĂ n!</h6>
+            <hr>
+        </div>
+        <div class="col-lg-3 col-md-3 profile-content-left">
+            <div th:each="item : ${user}" class="profile-content-left-category">
+                <span> <i class="fa fa-user-circle" aria-hidden="true"></i> TĂ i khoáº£n cá»§a tĂ´i
+                    </span>
+                <li><a th:href="@{'/shops/profile/' + ${item.Id}}" class="text-danger">Há»“ sÆ¡</a></li>
+                <li><a th:href="@{'/shops/change-password/'+ ${item.Id}}">Ä�á»•i máº­t kháº©u</a></li>
+                <li><a th:href="@{'/users/chatshop/'+ ${item.Id}}">TrĂ² chuyá»‡n</a></li>
+                <li><a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample"> QuĂªn máº­t kháº©u </a>
+                    <div class="collapse" id="collapseExample">
+                        <div class="card card-body">
+                            <span>TĂ i khoáº£n cá»§a báº¡n sáº½ bá»‹ Ä‘Äƒng xuáº¥t, náº¿u muá»‘n tiáº¿p tá»¥c
+                                    <a th:href="@{/forgot-password}" class="text-primary">nháº¥n vĂ o Ä‘Ă¢y</a>.
+                                </span>
+                        </div>
+                    </div>
+                </li>
+            </div>
+            <div th:object=${editshopDto} enctype="multipart/form-data">
+                <label for="image">áº¢nh Ä‘áº¡i diá»‡n:</label> <br>
+                <img class="profile-content-left-avatar border" th:src="@{'/getimage/' + *{id}}" th:alt="*{image}" />
+
+            </div>
+        </div>
+        <div class="col-lg-8 col-md-8 col-sm-12 profile-content-right">
+            <form th:action="@{/shops/update}" method="post" th:object=${editshopDto} enctype="multipart/form-data">
+                <div th:if="${message != null}">
+                    <h5 th:text="${message}" class="alert alert-success text-center"></h5>
+                </div>
+                <div class="form-group">
+                    <label for="image">Chá»�n áº£nh:</label><br>
+                    <label style="cursor: pointer;" class="border p-1"><i class="fas fa-file-image"> ThĂªm
+                        hĂ¬nh áº£nh</i>
+                        <input type="file" th:field="*{image}" style="display: none;"/>
+                    </label><br>
+                    <small id="helpId" class="text-muted">KĂ­ch thÆ°á»›c hĂ¬nh áº£nh dÆ°á»›i 1MB.</small>
+                </div>
+                <div class="form-group">
+                    <label for="username">TĂªn Ä‘Äƒng nháº­p:</label> <input readonly type="text" class="form-control" th:field="*{username}" name="username" id="username" aria-describedby="helpId" placeholder="TĂªn Ä‘Äƒng nháº­p">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email:</label> <input type="email" class="form-control" th:field="*{email}" name="email" id="email" aria-describedby="helpId" placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Sá»‘ Ä‘iá»‡n thoáº¡i:</label> <input type="text" class="form-control" th:field="*{phone}" name="phone" id="phone" aria-describedby="helpId" placeholder="Sá»‘ Ä‘iá»‡n thoáº¡i">
+                </div>
+                <div class="form-group">
+                    <label for="shop">TĂªn Ä‘áº¡i lĂ½:</label> <input type="text" class="form-control" th:field="*{Shopname}" name="shop" id="shop" aria-describedby="helpId" placeholder="TĂªn Ä‘áº¡i lĂ½">
+                </div>
+                <div class="form-group" ng-controller="setAddressCtrl">
+                    <label for="address">Ä�á»‹a chá»‰:</label>
+                    <input type="text" class="form-control mb-2" th:value="${setAddress}" name="address" id="address" placeholder="Ä�á»‹a chá»‰" ng-if="addressStatus == true" style="cursor: not-allowed; background-color: white;" readonly/>
+                    <input type="text" class="form-control" th:field="*{address}" ng-model="addressSelect" name="address" id="address" style="display: none;" />
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-4">
+                            <select class="custom-select" ng-options="item.name_with_type for item in tinhs" ng-model="tinhSelect" ng-change="selectTinh()">
+                                <option value="">Chá»�n tá»‰nh, thĂ nh phá»‘</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-4">
+                            <select class="custom-select" ng-options="item.name_with_type for item in listQuanHuyen" ng-model="huyenSelect" ng-change="selectHuyen()">
+                                <option value="">Chá»�n quáº­n, huyá»‡n</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-4">
+                            <select class="custom-select" ng-options="item.name_with_type for item in listXa" ng-model="xaSelect" ng-change="selectXa()">
+                                <option value="">Chá»�n xĂ£, phÆ°á»�ng</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="information">ThĂ´ng tin:</label>
+                    <textarea class="form-control" rows="3" th:field="*{information}" name="information" id="information" aria-describedby="helpId" placeholder="ThĂ´ng tin"></textarea>
+                </div>
+                <div class="form-group text-center mt-5">
+                    <button class="btn btn-outline-warning button-profile">Cáº­p nháº­t</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+
+</html>

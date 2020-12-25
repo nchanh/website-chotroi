@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/admin.html}">
+
+<head>
+    <link rel="stylesheet" href="/css/chat.css" />
+    <style>
+        .btn-collapsed-icon {
+            border: solid #222;
+            border-width: 0 1px 1px 0;
+            display: inline;
+            cursor: pointer;
+            padding: 3px;
+            position: absolute;
+            right: 0;
+        }
+        
+        .card-category a.btn.collapsed h6 {
+            transform: rotate(40deg);
+            -webkit-transform: rotate(40deg);
+            transition: 0.3s transform ease-in-out;
+        }
+        
+        .card-category a.btn h6 {
+            transform: rotate(-140deg);
+            -webkit-transform: rotate(-140deg);
+            transition: 0.3s transform ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid mb-5" ng-app="myApp" layout:fragment="content" style="padding-bottom: 20rem !important;">
+        <div class="row col-12" ng-controller="posting">
+            <div class="col-12 text-center">
+                <h2 class="text-uppercase">Trò chuyện</h2>
+                <h5 class="text-muted">Trao đổi thông tin giữa người mua và người bán!</h5>
+                <hr />
+            </div>
+            <div class="col-md-3 col-12 accordion" id="accordionExample" style="font-size: 12px">
+                <h6 class="text-center font-weight-bold alert alert-dark rounded">Danh sách các cuộc trò chuyện</h6>
+                <ul>
+                    <li th:each="a : ${listchatshop}" class="list-group-item">
+                        <a th:href="@{'/chatshop/' + ${a[1]}}">
+                            <i class="fad fa-comments-alt"></i> Nhắn tin với
+                            <span th:text="${a[2]}"></span>
+                        </a>
+                    </li>
+                    <li th:each="a : ${listchatuser}">
+                        <a th:href="@{'/chatuser/' + ${a[1]}}" class="list-group-item">
+                            <i class="fad fa-comments-alt"></i> Nhắn tin với
+                            <span th:text="${a[2]}"></span>
+                        </a>
+                    </li>
+                    <hr>
+                </ul>
+            </div>
+            <div class="col-md-9 col-12">
+                <noscript>
+                    <h2>Sorry! Your browser doesn't support Javascript</h2>
+                </noscript>
+                <h1>Vui lòng chọn người bạn muốn nói chuyện</h1>
+            </div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+        <script src="/js/chat.js"></script>
+    </div>
+
+
+</body>
+
+</html>
